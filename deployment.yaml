@@ -1,0 +1,8 @@
+pre:
+    - show interfaces ethernet eth0
+    - show interfaces ethernet eth1  
+commands:
+    - delete interfaces ethernet eth1 description API
+post:
+    - show interfaces ethernet eth0
+    - show interfaces ethernet eth1
