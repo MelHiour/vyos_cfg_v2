@@ -3,9 +3,6 @@ import requests
 import json
 import urllib3
 import key
-import logging
-import tabulate
-from pprint import pprint
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -15,7 +12,7 @@ def parse_yaml(file):
     return result 
 
 def yes_or_no(question):
-    reply = str(input(question+' (y/n): ')).lower().strip()
+    reply = str(input('\n' + question+' (y/n): ')).lower().strip()
     if reply[0] == 'y':
         return True
     if reply[0] == 'n':
@@ -77,7 +74,7 @@ def pusher(target, command_list, api_key):
         endpoint = get_endpoint_for_operation(list_of_dict[0]['op'])
         url = 'https://' + target + '/' + endpoint
         result = requests.post(url, files=data, verify=False)
-        return json.loads(result.text)
+        return [json.loads(result.text)]
     else:
         list_or_results = []
         for command in list_of_dict:
@@ -94,29 +91,3 @@ def save_config(target, api_key):
     to_push = prep_config(data, api_key)
     result = requests.post(url, files=to_push, verify=False)
     return json.loads(result.text)
-
-def deploy(inventory_yaml, deployment_yaml, verbose=False):
-
-    if verbose:
-        logging.basicConfig(format="%(asctime)s | %(levelname)s: %(message)s", level=logging.DEBUG)
-    else:
-        logging.basicConfig(format="### %(message)s",level=logging.INFO)
-
-    print('\n' + '#'*100)
-    print('DEPLOYMENT STARTED')
-    print('#' * 100 + '\n')
-
-    inventory = parse_yaml(inventory_yaml)
-    logging.info('Inventory yaml in {} parsed'.format(inventory_yaml))
-
-    deployment = parse_yaml(deployment_yaml)
-    logging.info('Deployment plan in {} parsed'.format(deployment_yaml))
-
-    for device,data in inventory.items():
-        logging.info('\nStarting deployment for "{}"'.format(device))
-        for stage,commands in deployment.items():
-            logging.info('\nStarting "{}" phase'.format(stage))
-            logging.info('Excecuting the following commands {}'.format(commands))
-            yes_or_no('Do you want to continue?')
-            result = pusher(data['address'], commands, data['key_name'])
-            print(result)
