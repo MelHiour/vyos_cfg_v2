@@ -7,8 +7,13 @@ output = '''
 # ERROR: {}
 # RESULT: {}
 '''
-def hasher(your_text):
-    print('{:#^70s}'.format('  '+your_text+'  '))
+def hasher(your_text, align='^'):
+    if align == '^':
+        print('{:#^70s}'.format('  '+your_text+'  '))
+    elif align == '<':
+        print('{:#<70s}'.format('# '+your_text+'  '))
+    else:
+        raise ValueError ('Only ^ and < are supported')
 
 def deploy(inventory_yaml, deployment_yaml):
     hasher('DEPLOYMENT STARTED')
@@ -18,12 +23,11 @@ def deploy(inventory_yaml, deployment_yaml):
     for device,data in inventory.items():
         hasher('Starting "{}"'.format(device.upper()))
         for stage,commands in deployment.items():
-            hasher('"{}" PHASE'.format(stage.upper()))
-            print('# COMMANS:')
+            hasher('{} PHASE'.format(stage.upper()), align='<')
             pprint(commands)
             results = helpers.pusher(data['address'], commands, data['key_name'])
             zipped = zip(commands,results)
-            hasher('RESULTS')
+            hasher('RESULTS', align = '<')
             for result in zipped:
                 print(output.format(
                      result[0],
