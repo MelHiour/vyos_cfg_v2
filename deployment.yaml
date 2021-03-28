@@ -1,9 +1,8 @@
 pre:
-    - show system host-name
     - show interfaces ethernet
-    - set interfaces ethernet eth2 description BLAH
 commands:
-    - delete interfaces ethernet eth3 description API
+    - delete interfaces ethernet eth1
+    - delete interfaces ethernet eth2
+    - delete interfaces ethernet eth3
 post:
-    - show system host-name
     - show interfaces ethernet
