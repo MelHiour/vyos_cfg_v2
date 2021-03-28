@@ -2,3 +2,4 @@ click
 PyYAML
 requests
 pytest
+mock
