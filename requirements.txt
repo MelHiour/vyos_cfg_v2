@@ -1,5 +1,6 @@
 click
 PyYAML
 requests
+requests-mock
 pytest
 mock
