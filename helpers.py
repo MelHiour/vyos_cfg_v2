@@ -1,4 +1,4 @@
-import yaml 
+import yaml
 import requests
 import json
 import urllib3
@@ -6,20 +6,23 @@ import key
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-def parse_yaml(file):   
+
+def parse_yaml(file):
     with open(file) as file:
         result = yaml.load(file, Loader=yaml.FullLoader)
-    return result 
+    return result
+
 
 def yes_or_no(question):
     reply = str(input('\n' + question+' (y/n): ')).lower().strip()
     if reply[:1] == 'y':
         return True
     if reply[:1] == 'n':
-        print ('### ABORTING ###')
+        print('### ABORTING ###')
         exit()
     else:
         return yes_or_no("Uhhhh... please enter Y or N")
+
 
 def hasher(your_text, align='^'):
     if align == '^':
@@ -27,7 +30,8 @@ def hasher(your_text, align='^'):
     elif align == '<':
         print('{:#<70s}'.format('# '+your_text+'  '))
     else:
-        raise ValueError ('Only ^ and < are supported')
+        raise ValueError('Only ^ and < are supported')
+
 
 def command_to_dict(command):
     schema = {'op': None, 'path': None}
@@ -42,12 +46,13 @@ def command_to_dict(command):
     elif 'delete' in operation:
         schema['op'] = 'delete'
     elif 'comment' in operation:
-        schema['op'] = 'comment' 
+        schema['op'] = 'comment'
     else:
         raise ValueError('Operation "{}" not supported'.format(operation))
-    
-    schema['path'] = path  
+
+    schema['path'] = path
     return schema
+
 
 def all_config(list_of_dict):
     set_of_operations = set(command['op'] for command in list_of_dict)
@@ -55,6 +60,7 @@ def all_config(list_of_dict):
         return False
     else:
         return True
+
 
 def prepare_data(data, api_key):
     '''
@@ -64,17 +70,19 @@ def prepare_data(data, api_key):
     to_push = {}
     to_push['data'] = (None, json.dumps(data))
     to_push['key'] = (None,  getattr(key, api_key))
-    return to_push 
+    return to_push
+
 
 def get_endpoint_for_operation(operation):
     if 'showConfig' in operation:
         return 'retrieve'
-    elif operation in ['set','delete','comment']:
+    elif operation in ['set', 'delete', 'comment']:
         return 'configure'
     else:
         raise ValueError('Operation "{}" not supported'.format(operation))
 
-def pusher(target, command_list, api_key, brave = False):
+
+def pusher(target, command_list, api_key, brave=False):
     list_of_dict = [command_to_dict(command) for command in command_list]
 
     if all_config(list_of_dict):
@@ -91,12 +99,13 @@ def pusher(target, command_list, api_key, brave = False):
             data = prepare_data(command, api_key)
             endpoint = get_endpoint_for_operation(command['op'])
             url = 'https://' + target + '/' + endpoint
-            if not brave:            
+            if not brave:
                 if endpoint == 'configure':
                     yes_or_no('Do you want to continue?')
             result = requests.post(url, files=data, verify=False)
             list_or_results.append(json.loads(result.text))
         return list_or_results
+
 
 def save_config(target, api_key):
     url = 'https://' + target + '/config-file'
