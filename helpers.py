@@ -26,9 +26,9 @@ def yes_or_no(question):
 
 def hasher(your_text, align='^'):
     if align == '^':
-        print('{:#^100s}'.format('  '+your_text+'  '))
+        return '{:#^100s}'.format('  '+your_text+'  ')
     elif align == '<':
-        print('{:#<100s}'.format('# '+your_text+'  '))
+        return '{:#<100s}'.format('# '+your_text+'  ')
     else:
         raise ValueError('Only ^ and < are supported')
 

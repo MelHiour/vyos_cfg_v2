@@ -25,3 +25,9 @@ def test_yes_or_n_recursion_on_not_y_or_n():
     with mock.patch('builtins.input', return_value="b"):        
         with pytest.raises(RecursionError):
             assert helpers.yes_or_no('Question') == "Uhhhh... please enter Y or N"
+
+def test_hasher_allign_center():
+    assert helpers.hasher('BLAH') == '#'*46 + '  BLAH  ' + '#'*46
+
+def test_hasher_allign_left():
+    assert helpers.hasher('BLAH', align ='<') == '# BLAH  ' + '#'*92
