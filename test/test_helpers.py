@@ -1,5 +1,6 @@
 import pytest
 import mock
+import requests_mock
 import helpers
 
 # This is another attempt to write tests without knowing how to do that. Forgive me World...
@@ -94,3 +95,9 @@ def test_get_endpoint_for_operation_unknown_op():
 def test_get_endpoint_for_operation_wrong_input():
     with pytest.raises(Exception):
         helpers.get_endpoint_for_operation(300)
+
+def test_save_config_succesful():
+    with requests_mock.Mocker() as mock:
+        result = '{"success": true, "data": "Saving configuration to \'/config/config.boot\'...\\nDone\\n", "error": null}'
+        mock.post('https://10.0.0.1/config-file', text=str(result))
+        assert helpers.save_config('10.0.0.1', 'default') == {'success': True, 'data': "Saving configuration to '/config/config.boot'...\nDone\n", 'error': None}
