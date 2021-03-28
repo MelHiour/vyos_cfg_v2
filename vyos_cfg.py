@@ -1,5 +1,4 @@
 import helpers 
-from tabulate import tabulate
 from pprint import pprint,pformat
 
 output = '''
@@ -8,30 +7,25 @@ output = '''
 # ERROR: {}
 # RESULT: {}
 '''
-
-def border_print(something):
-    print(tabulate([[something]], tablefmt = 'grid'))
+def hasher(your_text):
+    print('{:#^70s}'.format('  '+your_text+'  '))
 
 def deploy(inventory_yaml, deployment_yaml):
-    border_print('STARTING DEPLOYMENT')
-
+    hasher('DEPLOYMENT STARTED')
     inventory = helpers.parse_yaml(inventory_yaml)
-    print('Inventory in {} parsed'.format(inventory_yaml))
-
     deployment = helpers.parse_yaml(deployment_yaml)
-    print('Deployment plan in {} parsed\n'.format(deployment_yaml))
 
     for device,data in inventory.items():
-        border_print('Starting deployment for "{}"'.format(device.upper()))
+        hasher('Starting "{}"'.format(device.upper()))
         for stage,commands in deployment.items():
-            print('# Starting "{}" phase'.format(stage.upper()))
-            print('# Excecuting the following commands')
+            hasher('"{}" PHASE'.format(stage.upper()))
+            print('# COMMANS:')
             pprint(commands)
-            helpers.yes_or_no('Do you want to continue?')
             results = helpers.pusher(data['address'], commands, data['key_name'])
             zipped = zip(commands,results)
+            hasher('RESULTS')
             for result in zipped:
-                border_print(output.format(
+                print(output.format(
                      result[0],
                      result[1]['success'],
                      result[1]['error'],

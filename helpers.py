@@ -73,6 +73,7 @@ def pusher(target, command_list, api_key):
         data = prepare_data(list_of_dict, api_key)
         endpoint = get_endpoint_for_operation(list_of_dict[0]['op'])
         url = 'https://' + target + '/' + endpoint
+        yes_or_no('Do you want to continue?')
         result = requests.post(url, files=data, verify=False)
         return [json.loads(result.text)]
     else:
@@ -81,6 +82,8 @@ def pusher(target, command_list, api_key):
             data = prepare_data(command, api_key)
             endpoint = get_endpoint_for_operation(command['op'])
             url = 'https://' + target + '/' + endpoint
+            if endpoint == 'configure':
+                yes_or_no('Do you want to continue?')
             result = requests.post(url, files=data, verify=False)
             list_or_results.append(json.loads(result.text))
         return list_or_results
