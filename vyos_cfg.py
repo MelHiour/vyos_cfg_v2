@@ -7,27 +7,21 @@ output = '''
 # ERROR: {}
 # RESULT: {}
 '''
-def hasher(your_text, align='^'):
-    if align == '^':
-        print('{:#^70s}'.format('  '+your_text+'  '))
-    elif align == '<':
-        print('{:#<70s}'.format('# '+your_text+'  '))
-    else:
-        raise ValueError ('Only ^ and < are supported')
 
 def deploy(inventory_yaml, deployment_yaml, save_config = True, brave_mode = False):
-    hasher('DEPLOYMENT STARTED')
+    helpers.hasher('DEPLOYMENT STARTED')
     inventory = helpers.parse_yaml(inventory_yaml)
     deployment = helpers.parse_yaml(deployment_yaml)
 
     for device,data in inventory.items():
-        hasher('Starting "{}"'.format(device.upper()))
+        helpers.hasher('Starting "{}"'.format(device.upper()))
         for stage,commands in deployment.items():
-            hasher('{} PHASE'.format(stage.upper()), align='<')
+            helpers.hasher('{} PHASE'.format(stage.upper()), align='<')
             pprint(commands)
+            
             results = helpers.pusher(data['address'], commands, data['key_name'], brave=brave_mode)
             zipped = zip(commands,results)
-            hasher('RESULTS', align = '<')
+            helpers.hasher('RESULTS', align = '<')
             for result in zipped:
                 print(output.format(
                      result[0],
@@ -37,7 +31,7 @@ def deploy(inventory_yaml, deployment_yaml, save_config = True, brave_mode = Fal
                 ))
 
         if save_config:
-            hasher('SAVING CONFIGURATION')
+            helpers.hasher('SAVING CONFIGURATION')
             result = helpers.save_config(data['address'], data['key_name'])
             print(output.format('Save config', result['success'], result['error'], result['data']))
 

@@ -21,6 +21,14 @@ def yes_or_no(question):
     else:
         return yes_or_no("Uhhhh... please enter Y or N")
 
+def hasher(your_text, align='^'):
+    if align == '^':
+        print('{:#^70s}'.format('  '+your_text+'  '))
+    elif align == '<':
+        print('{:#<70s}'.format('# '+your_text+'  '))
+    else:
+        raise ValueError ('Only ^ and < are supported')
+
 def command_to_dict(command):
     schema = {'op': None, 'path': None}
 
