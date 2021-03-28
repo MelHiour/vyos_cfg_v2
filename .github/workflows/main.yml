@@ -31,7 +31,7 @@ jobs:
         flake8 .  --max-line-length=130 --statistics --exclude test*
     - name: Test with pytest
       run: |
-        pytest --doctest-modules --junitxml=junit/test-results-${{ matrix.python-version }}.xml
+        pytest --doctest-modules --junitxml=test-report/test-results-${{ matrix.python-version }}.xml
     - name: Upload pytest test results
       uses: actions/upload-artifact@v2
       with:
