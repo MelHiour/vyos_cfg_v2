@@ -14,6 +14,7 @@ A simple script for pushing config to two or more instances of VyOS. It can send
 ├── key.py                      Contains API key(s). Please gitignore this
 ├── README.md                   This very file
 ├── requirements.txt            All you need to have to run the script
+├── tests                       Pretending that I can write tests here...
 └── vyos_cfg.py                 Main script
 ```
 
