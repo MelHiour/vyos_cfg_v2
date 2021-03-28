@@ -1,4 +1,5 @@
 import helpers
+import click
 from pprint import pprint, pformat
 
 output = '''
@@ -9,10 +10,15 @@ output = '''
 '''
 
 
-def deploy(inventory_yaml, deployment_yaml, save_config=True, brave_mode=False):
+@click.command()
+@click.option('--inventory', '-i', required=True, help='Inventory YAML')
+@click.option('--deployment', '-d', required=True, help='Deployment file (YAML)')
+@click.option('--no-save', '-ns', is_flag=True, default=False, help='Whether to save config or not')
+@click.option('--brave', '-b', is_flag=True, default=False, help='No "Are you sure?" prompt. For brave hearts only')
+def deploy(inventory, deployment, no_save, brave):
     helpers.hasher('DEPLOYMENT STARTED')
-    inventory = helpers.parse_yaml(inventory_yaml)
-    deployment = helpers.parse_yaml(deployment_yaml)
+    inventory = helpers.parse_yaml(inventory)
+    deployment = helpers.parse_yaml(deployment)
 
     for device, data in inventory.items():
         helpers.hasher('Starting "{}"'.format(device.upper()))
@@ -21,7 +27,7 @@ def deploy(inventory_yaml, deployment_yaml, save_config=True, brave_mode=False):
             pprint(commands)
 
             results = helpers.pusher(
-                data['address'], commands, data['key_name'], brave=brave_mode)
+                data['address'], commands, data['key_name'], brave)
             zipped = zip(commands, results)
             helpers.hasher('RESULTS', align='<')
             for result in zipped:
@@ -32,7 +38,7 @@ def deploy(inventory_yaml, deployment_yaml, save_config=True, brave_mode=False):
                     pformat(result[1]['data'])
                 ))
 
-        if save_config:
+        if not no_save:
             helpers.hasher('SAVING CONFIGURATION')
             result = helpers.save_config(data['address'], data['key_name'])
             print(output.format('Save config',
@@ -40,4 +46,4 @@ def deploy(inventory_yaml, deployment_yaml, save_config=True, brave_mode=False):
 
 
 if __name__ == '__main__':
-    deploy('inventory.yaml', 'deployment.yaml', brave_mode=False)
+    deploy()
