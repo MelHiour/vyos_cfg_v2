@@ -92,7 +92,7 @@ def pusher(target, command_list, api_key, brave = False):
 
 def save_config(target, api_key):
     url = 'https://' + target + '/config-file'
-    data = {"op": "save"}
+    data = '{"op": "save"}'
     to_push = prepare_data(data, api_key)
     result = requests.post(url, files=to_push, verify=False)
-    return json.loads(result.text)
+    return result.text

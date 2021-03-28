@@ -15,7 +15,7 @@ def hasher(your_text, align='^'):
     else:
         raise ValueError ('Only ^ and < are supported')
 
-def deploy(inventory_yaml, deployment_yaml, brave_mode = False):
+def deploy(inventory_yaml, deployment_yaml, save_config = True, brave_mode = False):
     hasher('DEPLOYMENT STARTED')
     inventory = helpers.parse_yaml(inventory_yaml)
     deployment = helpers.parse_yaml(deployment_yaml)
@@ -35,6 +35,11 @@ def deploy(inventory_yaml, deployment_yaml, brave_mode = False):
                      result[1]['error'],
                      pformat(result[1]['data'])
                 ))
+
+        if save_config:
+            hasher('SAVING CONFIGURATION')
+            result = helpers.save_config(data['address'], data['key_name'])
+            print(output.format('Save config', result['success'], result['error'], result['data']))
 
 if __name__ == '__main__':
     deploy('inventory.yaml','deployment.yaml', brave_mode=True)
