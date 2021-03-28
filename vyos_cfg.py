@@ -15,7 +15,7 @@ def hasher(your_text, align='^'):
     else:
         raise ValueError ('Only ^ and < are supported')
 
-def deploy(inventory_yaml, deployment_yaml):
+def deploy(inventory_yaml, deployment_yaml, brave_mode = False):
     hasher('DEPLOYMENT STARTED')
     inventory = helpers.parse_yaml(inventory_yaml)
     deployment = helpers.parse_yaml(deployment_yaml)
@@ -25,7 +25,7 @@ def deploy(inventory_yaml, deployment_yaml):
         for stage,commands in deployment.items():
             hasher('{} PHASE'.format(stage.upper()), align='<')
             pprint(commands)
-            results = helpers.pusher(data['address'], commands, data['key_name'])
+            results = helpers.pusher(data['address'], commands, data['key_name'], brave=brave_mode)
             zipped = zip(commands,results)
             hasher('RESULTS', align = '<')
             for result in zipped:
@@ -37,4 +37,4 @@ def deploy(inventory_yaml, deployment_yaml):
                 ))
 
 if __name__ == '__main__':
-    deploy('inventory.yaml','deployment.yaml')
+    deploy('inventory.yaml','deployment.yaml', brave_mode=True)
