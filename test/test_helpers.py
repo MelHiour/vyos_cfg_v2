@@ -123,13 +123,25 @@ def test_pusher_set_commands_succesful():
     with requests_mock.Mocker() as mock:
         result = '{"success": true, "data": null, "error": null}'
         mock.post('https://192.0.2.2/configure', text=str(result))
-        assert helpers.pusher('192.0.2.2', ['set system host-name test'], 'default', brave=True) == [{"success": True, "data": None, "error": None}]
+        assert helpers.pusher('192.0.2.2', ['set system host-name test'], 'default', brave=True) == [
+            {"success": True, "data": None, "error": None}]
+
 
 def test_pusher_show_commands_succesful():
     with requests_mock.Mocker() as mock:
         result = '{"success": true, "data": {"ethernet": {"eth0": {"address": "192.168.0.14/24", "hw-id": "50:01:00:04:00:00"}}}, "error": null}'
         mock.post('https://192.0.2.2/retrieve', text=str(result))
-        assert helpers.pusher('192.0.2.2', ['show inteface ethernet'], 'default', brave=True) == [{"success": True, "data": {"ethernet": {"eth0": {"address": "192.168.0.14/24", "hw-id": "50:01:00:04:00:00"}}}, "error": None}]
+        assert helpers.pusher('192.0.2.2', ['show inteface ethernet'], 'default', brave=True) == [{"success": True, "data": {
+            "ethernet": {"eth0": {"address": "192.168.0.14/24", "hw-id": "50:01:00:04:00:00"}}}, "error": None}]
+
+
+def test_pusher_not_brave_shows_input(capsys):
+    with mock.patch('builtins.input', return_value="n"):
+        with pytest.raises(SystemExit) as e:
+            helpers.pusher(
+                '192.0.2.2', ['set system host-name test'], 'default')
+            assert e.type == SystemExit
+
 
 def test_save_config_succesful():
     with requests_mock.Mocker() as mock:
@@ -137,6 +149,7 @@ def test_save_config_succesful():
         mock.post('https://192.0.2.2/config-file', text=str(result))
         assert helpers.save_config('192.0.2.2', 'default') == {
             'success': True, 'data': "Saving configuration to '/config/config.boot'...\nDone\n", 'error': None}
+
 
 def test_save_config_wrong_ip():
     with pytest.raises(Exception):
