@@ -3,6 +3,14 @@ import requests
 import json
 import urllib3
 import key
+from pprint import pformat
+
+output = '''
+# COMMAND: {}
+# SUCCESS: {}
+# ERROR: {}
+# RESULT: {}
+'''
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -92,7 +100,7 @@ def pusher(target, command_list, api_key, brave=False):
         if not brave:
             yes_or_no('Do you want to continue?')
         result = requests.post(url, files=data, verify=False)
-        return [json.loads(result.text)]
+        return {'batched': True, 'result': json.loads(result.text)}
     else:
         list_or_results = []
         for command in list_of_dict:
@@ -104,7 +112,11 @@ def pusher(target, command_list, api_key, brave=False):
                     yes_or_no('Do you want to continue?')
             result = requests.post(url, files=data, verify=False)
             list_or_results.append(json.loads(result.text))
-        return list_or_results
+        return {'batched': False, 'result': list_or_results}
+
+
+def show_result(command, result):
+    return output.format(command, result['success'], result['error'], pformat(result['data']))
 
 
 def save_config(target, api_key):

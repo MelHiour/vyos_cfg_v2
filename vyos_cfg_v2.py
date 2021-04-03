@@ -1,13 +1,6 @@
 import helpers
 import click
-from pprint import pprint, pformat
-
-output = '''
-# COMMAND: {}
-# SUCCESS: {}
-# ERROR: {}
-# RESULT: {}
-'''
+from pprint import pprint
 
 
 @click.command()
@@ -28,21 +21,19 @@ def deploy(inventory, deployment, no_save, brave):
 
             results = helpers.pusher(
                 data['address'], commands, data['key_name'], brave)
-            zipped = zip(commands, results)
             print(helpers.hasher('RESULTS', align='<'))
-            for result in zipped:
-                print(output.format(
-                    result[0],
-                    result[1]['success'],
-                    result[1]['error'],
-                    pformat(result[1]['data'])
-                ))
+            if results['batched']:
+                print(helpers.show_result(
+                    'Batched push of commands above', results['result']))
+            else:
+                zipped = zip(commands, results['result'])
+                for result in zipped:
+                    print(helpers.show_result(result[0], result[1]))
 
         if not no_save:
             print(helpers.hasher('SAVING CONFIGURATION'))
             result = helpers.save_config(data['address'], data['key_name'])
-            print(output.format('Save config',
-                  result['success'], result['error'], result['data']))
+            print(helpers.show_result('Save config', result))
 
 
 if __name__ == '__main__':
