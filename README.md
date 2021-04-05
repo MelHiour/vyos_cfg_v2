@@ -84,7 +84,7 @@ Usage: vyos_cfg.py [OPTIONS]
 Options:
   -i, --inventory TEXT   Inventory YAML  [required]
   -d, --deployment TEXT  Deployment file (YAML)  [required]
-  -ns, --no-save         Whether to save config or not
+  -s, --skip-save        Whether to skip save config or not
   -b, --brave            No "Are you sure?" prompt. For brave hearts only
   --help                 Show this message and exit.
   
