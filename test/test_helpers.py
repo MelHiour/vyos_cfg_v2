@@ -56,14 +56,15 @@ def test_hasher_raises_an_error_on_unkonwn_arg():
     ('show interface', {'op': 'showConfig', 'path': ['interface']}),
     ('set interface', {'op': 'set', 'path': ['interface']}),
     ('delete interface', {'op': 'delete', 'path': ['interface']}),
-    ('comment interface', {'op': 'comment', 'path': ['interface']})])
+    ('comment interface', {'op': 'comment', 'path': ['interface']}),
+    ('get interface', {'op': 'show', 'path': ['interface']})])
 def test_command_to_dict_inputs(test_input, expected):
     assert helpers.command_to_dict(test_input) == expected
 
 
 def test_command_to_dict_raises_error_on_unknown_op():
     with pytest.raises(ValueError):
-        helpers.command_to_dict('get interface')
+        helpers.command_to_dict('blah interface')
 
 
 def test_command_to_dict_wrong_input():
@@ -73,7 +74,8 @@ def test_command_to_dict_wrong_input():
 
 @pytest.mark.parametrize("test_input,expected", [
     ([{'op': 'showConfig'}, {'op': 'set'}], False),
-    ([{'op': 'delete'}, {'op': 'set'}], True)])
+    ([{'op': 'delete'}, {'op': 'set'}], True),
+    ([{'op': 'show'}, {'op': 'showConfig'}], False)])
 def test_all_config_inputs(test_input, expected):
     assert helpers.all_config(test_input) == expected
 
@@ -104,7 +106,8 @@ def test_prepare_data_wrong_input():
     ('showConfig', 'retrieve'),
     ('set', 'configure'),
     ('delete', 'configure'),
-    ('comment', 'configure')])
+    ('comment', 'configure'),
+    ('show', 'show')])
 def test_get_endpoint_for_operation_inputs(test_input, expected):
     assert helpers.get_endpoint_for_operation(test_input) == expected
 
@@ -166,7 +169,7 @@ def test_pusher_not_brave_shows_input(capsys):
 
 
 def test_show_result_succesful():
-    expected = '\n# COMMAND: some_command\n# SUCCESS: True\n# ERROR: None\n# RESULT: None\n'
+    expected = '\n# COMMAND: some_command\n# SUCCESS: True\n# ERROR: None\n# RESULT: \nNone\n'
     gotten = helpers.show_result(
         'some_command', {"success": True, "data": None, "error": None})
     assert gotten == expected

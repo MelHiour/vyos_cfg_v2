@@ -9,7 +9,8 @@ output = '''
 # COMMAND: {}
 # SUCCESS: {}
 # ERROR: {}
-# RESULT: {}
+# RESULT: 
+{}
 '''
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -55,6 +56,8 @@ def command_to_dict(command):
         schema['op'] = 'delete'
     elif 'comment' in operation:
         schema['op'] = 'comment'
+    elif 'get' in operation:
+        schema['op'] = 'show'
     else:
         raise ValueError('Operation "{}" not supported'.format(operation))
 
@@ -63,12 +66,12 @@ def command_to_dict(command):
 
 
 def all_config(list_of_dict):
+    intrusive_commands = {'set', 'delete', 'comment'}
     set_of_operations = set(command['op'] for command in list_of_dict)
-    if 'showConfig' in set_of_operations:
-        return False
-    else:
+    if set_of_operations <= intrusive_commands:
         return True
-
+    else:
+        return False
 
 def prepare_data(data, api_key):
     '''
@@ -84,6 +87,8 @@ def prepare_data(data, api_key):
 def get_endpoint_for_operation(operation):
     if 'showConfig' in operation:
         return 'retrieve'
+    elif 'show' in operation:
+        return 'show'
     elif operation in ['set', 'delete', 'comment']:
         return 'configure'
     else:
@@ -125,7 +130,14 @@ def pusher(target, port, command_list, api_key, brave=False):
 
 
 def show_result(command, result):
-    return output.format(command, result['success'], result['error'], pformat(result['data']))
+    if isinstance(result['data'],str):
+        outcome = result['data'].splitlines()
+    else:
+        outcome = result['data']
+    return output.format(command, 
+                         result['success'], 
+                         result['error'], 
+                         pformat(outcome, width=120))
 
 
 def save_config(target, port, api_key):
