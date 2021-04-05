@@ -1,14 +1,16 @@
+# vyos_cfg_v2.py
+A simple script for pushing config to one or more instances of VyOS. It can send a predifined list of commands to devices using API. You can specify the logic using YAML syntaxis to support different scenarios (ex. pre-deployment checks, deployment, post-deployment activities).
+
+The list of supported "commands" is
+- show - `show configuration interfaces`
+- get - `show vrrp`, `show arp`
+- set - `set system host-name BLAH`
+- delete - `delete system host-name BLAH`
+- comment
+
 > vyos_cfg_v2 is the new shiny version of https://github.com/MelHiour/vyos_cfg. The main difference is the "backend" used. In case of VYOS_CFG it is the good old paramiko, VYOS_CFG_V2 uses VYOS_API instead. 
 
 > Please note you need to use VyOS rolling release at the moment to get the [API](https://docs.vyos.io/en/latest/configuration/service/https.html) support. 
-
-# vyos_cfg.py
-A simple script for pushing config to one or more instances of VyOS. It can send a predifined list of commands to devices using API. You can specify the logic using YAML syntaxis to support different scenarious (es. pre-deployment checks, deployment, post-deployment activities).
-The list of supported commands is
-- show - `show configuration interfaces`
-- get - `show vvrp`, `show arp`
-- set - `set system host-name BLAH`
-- delete - `delete system host-name BLAH`
 
 ## Files
 ```
@@ -59,7 +61,18 @@ post:
     - show interfaces ethernet
 ```
 
-Just throw a bunch of commands towards device...
+You can also check "operational" data instead of configuration.
+```
+# cat deployment.yaml
+pre:
+    - get interfaces 
+commands:
+    - delete interfaces ethernet eth3 description API
+post:
+    - get interfaces 
+```
+
+Just throw a bunch of commands towards the device...
 ```
 # cat deployment.yaml
 one-off:
@@ -68,7 +81,7 @@ one-off:
     - delete interfaces ethernet eth4
 ```
 
-Just collect some operational information
+Collect some operational information
 ```cat deployment.yaml 
 ops:
     - get arp
@@ -90,7 +103,7 @@ AFTER:
 
 #### Execution example
 ```
-[root@localhost vyos_cfg_v2]# python3 vyos_cfg.py --help
+python3 vyos_cfg.py --help
 Usage: vyos_cfg.py [OPTIONS]
 
 Options:
@@ -100,7 +113,7 @@ Options:
   -b, --brave            No "Are you sure?" prompt. For brave hearts only
   --help                 Show this message and exit.
   
-[root@localhost vyos_cfg_v2]# python3 vyos_cfg.py -i inventory.yaml -d deployment.yaml --brave
+python3 vyos_cfg.py -i inventory.yaml -d deployment.yaml --brave
 #######################################  DEPLOYMENT STARTED  #######################################
 ########################################  Starting "VYOS1"  ########################################
 # PRE PHASE  #######################################################################################
