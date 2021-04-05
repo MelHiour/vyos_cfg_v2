@@ -102,8 +102,8 @@ def all_config(list_of_dict):
 def prepare_data(data, api_key):
     '''
     Creating a dictionary which can be accepted by VyOS
-    args: 
-    data(native data structures), 
+    args:
+    data(native data structures),
     api_key(str) - the name of the key from key.py
     returns: to_push(dict)
     {'data':(None,DATA),{'key':(None,KEY)}
@@ -147,8 +147,8 @@ def save_needed(command_list):
 
 def pusher(target, port, command_list, api_key, brave=False):
     '''
-    Main function to push the data using API  
-    args: 
+    Main function to push the data using API
+    args:
     target(str) - IP address or hostname
     port(str) - TCP port
     command_list (list) - the list of commands to push
@@ -186,7 +186,7 @@ def show_result(command, result):
     '''
     Helps formatting the output of the command sent.
     Formatting strings differently. Needed mainly for get commands.
-    args: command (str)  
+    args: command (str)
     returns: result (dict)
     '''
     if isinstance(result['data'], str):
@@ -202,7 +202,7 @@ def show_result(command, result):
 def save_config(target, port, api_key):
     '''
     Just saving the configuration.
-    args: 
+    args:
     target(str) - IP address or hostname
     port(str) - TCP port
     api_key(str) - the name of the key from key.py
