@@ -35,7 +35,8 @@ def deploy(inventory, deployment, skip_save, brave):
         if not skip_save:
             if save_needed:
                 print(helpers.hasher('SAVING CONFIGURATION'))
-                result = helpers.save_config(data['address'], data['port'], data['key_name'])
+                result = helpers.save_config(
+                    data['address'], data['port'], data['key_name'])
                 print(helpers.show_result('Save config', result))
 
 

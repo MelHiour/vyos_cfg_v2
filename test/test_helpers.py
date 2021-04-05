@@ -118,6 +118,7 @@ def test_get_endpoint_for_operation_wrong_input():
     with pytest.raises(Exception):
         helpers.get_endpoint_for_operation(300)
 
+
 @pytest.mark.parametrize("test_input,expected", [
     (['show config', 'show config'], False),
     (['show config', 'delete config'], True),
@@ -129,9 +130,10 @@ def test_get_endpoint_for_operation_wrong_input():
     (['delete config', 'delete config'], True),
     (['delete config', 'comment config'], True),
     (['comment config', 'comment config'], True)
-    ])
+])
 def test_save_needed_inputs(test_input, expected):
-    assert helpers.save_needed(test_input) == expected    
+    assert helpers.save_needed(test_input) == expected
+
 
 def test_pusher_set_commands_succesful():
     with requests_mock.Mocker() as mock:
@@ -140,7 +142,7 @@ def test_pusher_set_commands_succesful():
             "success": True, "data": None, "error": None}}
         mock.post('https://192.0.2.2:443/configure', text=str(result))
         gotten = helpers.pusher(
-            '192.0.2.2','443', ['set system host-name test'], 'default', brave=True)
+            '192.0.2.2', '443', ['set system host-name test'], 'default', brave=True)
         assert gotten == expected
 
 
