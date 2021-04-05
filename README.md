@@ -1,6 +1,6 @@
 > vyos_cfg_v2 is the new shiny version of https://github.com/MelHiour/vyos_cfg. The main difference is the "backend" used. In case of VYOS_CFG it is the good old paramiko, VYOS_CFG_V2 uses VYOS_API instead. 
 
-> Please note you need to use VyOS rolling release at the moment to get the API support. 
+> Please note you need to use VyOS rolling release at the moment to get the [API](https://docs.vyos.io/en/latest/configuration/service/https.html) support. 
 
 # vyos_cfg.py
 A simple script for pushing config to two or more instances of VyOS. It can send a predifined list of commands to devices using API. You can specify the logic using YAML syntaxis to support different scenarious (es. pre-deployment checks, deployment, post-deployment activities).
