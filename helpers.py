@@ -73,6 +73,7 @@ def all_config(list_of_dict):
     else:
         return False
 
+
 def prepare_data(data, api_key):
     '''
     Creating a dictionary which can be accepted by VyOS
@@ -130,13 +131,13 @@ def pusher(target, port, command_list, api_key, brave=False):
 
 
 def show_result(command, result):
-    if isinstance(result['data'],str):
+    if isinstance(result['data'], str):
         outcome = result['data'].splitlines()
     else:
         outcome = result['data']
-    return output.format(command, 
-                         result['success'], 
-                         result['error'], 
+    return output.format(command,
+                         result['success'],
+                         result['error'],
                          pformat(outcome, width=120))
 
 
