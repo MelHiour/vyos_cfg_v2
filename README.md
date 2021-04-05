@@ -24,15 +24,19 @@ Contains just a host list with IP addresses and API key name from key.py
 cat inventory.yaml
 vyos1:
     address: 192.168.0.11
+    port: 443
     key_name: default
 vyos2:
     address: 192.168.0.12
+    port: 443
     key_name: default
 vyos3:
     address: 192.168.0.13
+    port: 443
     key_name: default
 vyos4:
     address: 192.168.0.14
+    port: 443
     key_name: default
 ```
 
