@@ -89,6 +89,13 @@ def get_endpoint_for_operation(operation):
     else:
         raise ValueError('Operation "{}" not supported'.format(operation))
 
+def save_needed(command_list):
+    intrusive_commands = {'set', 'delete', 'comment'}
+    set_of_operations = set(command.split()[0] for command in command_list)
+    if not intrusive_commands.isdisjoint(set_of_operations):
+        return True
+    else:
+        return False
 
 def pusher(target, port, command_list, api_key, brave=False):
     list_of_dict = [command_to_dict(command) for command in command_list]
