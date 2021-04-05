@@ -90,13 +90,13 @@ def get_endpoint_for_operation(operation):
         raise ValueError('Operation "{}" not supported'.format(operation))
 
 
-def pusher(target, command_list, api_key, brave=False):
+def pusher(target, port, command_list, api_key, brave=False):
     list_of_dict = [command_to_dict(command) for command in command_list]
 
     if all_config(list_of_dict):
         data = prepare_data(list_of_dict, api_key)
         endpoint = get_endpoint_for_operation(list_of_dict[0]['op'])
-        url = 'https://' + target + '/' + endpoint
+        url = 'https://{}:{}/{}'.format(target, port, endpoint)
         if not brave:
             yes_or_no('Do you want to continue?')
         result = requests.post(url, files=data, verify=False)
@@ -106,7 +106,7 @@ def pusher(target, command_list, api_key, brave=False):
         for command in list_of_dict:
             data = prepare_data(command, api_key)
             endpoint = get_endpoint_for_operation(command['op'])
-            url = 'https://' + target + '/' + endpoint
+            url = 'https://{}:{}/{}'.format(target, port, endpoint)
             if not brave:
                 if endpoint == 'configure':
                     yes_or_no('Do you want to continue?')
@@ -119,8 +119,8 @@ def show_result(command, result):
     return output.format(command, result['success'], result['error'], pformat(result['data']))
 
 
-def save_config(target, api_key):
-    url = 'https://' + target + '/config-file'
+def save_config(target, port, api_key):
+    url = 'https://{}:{}/config-file'.format(target, port)
     data = {"op": "save"}
     to_push = prepare_data(data, api_key)
     result = requests.post(url, files=to_push, verify=False)
