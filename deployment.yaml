@@ -1,8 +1,8 @@
 pre:
-    - show interfaces ethernet
+    - show high-availability vrrp
+    - get vrrp
 commands:
-    - delete interfaces ethernet eth1
-    - delete interfaces ethernet eth2
-    - delete interfaces ethernet eth3
+    - set show high-availability vrrp group TEST priority 200
 post:
-    - show interfaces ethernet
+    - show high-availability vrrp
+    - get vrrp
