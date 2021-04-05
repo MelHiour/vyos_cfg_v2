@@ -9,9 +9,8 @@ output = '''
 # COMMAND: {}
 # SUCCESS: {}
 # ERROR: {}
-# RESULT: 
-{}
-'''
+# RESULT:
+{}'''
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 

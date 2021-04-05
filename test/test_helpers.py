@@ -169,7 +169,7 @@ def test_pusher_not_brave_shows_input(capsys):
 
 
 def test_show_result_succesful():
-    expected = '\n# COMMAND: some_command\n# SUCCESS: True\n# ERROR: None\n# RESULT: \nNone\n'
+    expected = '\n# COMMAND: some_command\n# SUCCESS: True\n# ERROR: None\n# RESULT:\nNone'
     gotten = helpers.show_result(
         'some_command', {"success": True, "data": None, "error": None})
     assert gotten == expected
