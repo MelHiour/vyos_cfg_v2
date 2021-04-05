@@ -20,7 +20,7 @@ def deploy(inventory, deployment, no_save, brave):
             pprint(commands)
 
             results = helpers.pusher(
-                data['address'], commands, data['key_name'], brave)
+                data['address'], data['port'], commands, data['key_name'], brave)
             print(helpers.hasher('RESULTS', align='<'))
             if results['batched']:
                 print(helpers.show_result(
@@ -32,7 +32,7 @@ def deploy(inventory, deployment, no_save, brave):
 
         if not no_save:
             print(helpers.hasher('SAVING CONFIGURATION'))
-            result = helpers.save_config(data['address'], data['key_name'])
+            result = helpers.save_config(data['address'], data['port'], data['key_name'])
             print(helpers.show_result('Save config', result))
 
 
