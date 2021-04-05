@@ -145,7 +145,7 @@ def test_pusher_not_brave_shows_input(capsys):
     with mock.patch('builtins.input', return_value="n"):
         with pytest.raises(SystemExit) as e:
             helpers.pusher(
-                '192.0.2.2', ['set system host-name test'], 'default')
+                '192.0.2.2', '443', ['set system host-name test'], 'default')
             assert e.type == SystemExit
 
 
