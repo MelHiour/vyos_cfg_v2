@@ -3,7 +3,12 @@
 > Please note you need to use VyOS rolling release at the moment to get the [API](https://docs.vyos.io/en/latest/configuration/service/https.html) support. 
 
 # vyos_cfg.py
-A simple script for pushing config to two or more instances of VyOS. It can send a predifined list of commands to devices using API. You can specify the logic using YAML syntaxis to support different scenarious (es. pre-deployment checks, deployment, post-deployment activities).
+A simple script for pushing config to one or more instances of VyOS. It can send a predifined list of commands to devices using API. You can specify the logic using YAML syntaxis to support different scenarious (es. pre-deployment checks, deployment, post-deployment activities).
+The list of supported commands is
+- show - `show configuration interfaces`
+- get - `show vvrp`, `show arp`
+- set - `set system host-name BLAH`
+- delete - `delete system host-name BLAH`
 
 ## Files
 ```
@@ -41,7 +46,7 @@ vyos4:
 ```
 
 #### deployments.yaml
-You can specify whatever logic you want here using YAML syntaxis. Here are a few examples.
+You can specify whatever logic you want here using YAML syntaxis. You can use **show**, **get**, **set**, **delete** and **comment** operations. Here are a few examples.
 
 Most common scenarios with PRE and POST steps which allows us to check the state of the device before and after the changes.
 ```
@@ -72,7 +77,7 @@ BEFORE:
 DEPLOYMENT:
     - set interfaces etherent eth3 description API
 AFTER:
-    - show interfaces ethernet
+    - get interfaces 
 ```
 
 
