@@ -68,7 +68,14 @@ one-off:
     - delete interfaces ethernet eth4
 ```
 
-You can also mix show and config commands in every block
+Just collect some operational information
+```cat deployment.yaml 
+ops:
+    - get arp
+    - get ip route
+```
+
+You can also mix commands in every block
 ```
 # cat deployment.yaml
 BEFORE:
