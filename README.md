@@ -8,6 +8,8 @@ The list of supported "commands" is
 - delete - `delete system host-name BLAH`
 - comment
 
+Short article (in Russian) about the script http://www.labnfun.ru/2021/04/vyos.html
+
 > vyos_cfg_v2 is the new shiny version of https://github.com/MelHiour/vyos_cfg. The main difference is the "backend" used. In case of VYOS_CFG it is the good old paramiko, VYOS_CFG_V2 uses VYOS_API instead. 
 
 > Please note you need to use VyOS rolling release at the moment to get the [API](https://docs.vyos.io/en/latest/configuration/service/https.html) support. 
