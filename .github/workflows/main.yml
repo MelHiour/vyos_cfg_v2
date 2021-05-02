@@ -33,15 +33,3 @@ jobs:
     - name: Test with pytest
       run: |
         pytest --doctest-modules --junitxml=test-report/test-results-${{ matrix.python-version }}.xml
-#    - name: Upload pytest test results
-#      uses: actions/upload-artifact@v2
-#      with:
-#        name: pytest-results-${{ matrix.python-version }}
-#        path: test-report/test-results-${{ matrix.python-version }}.xml
-#      if: ${{ always() }}
-  deploy:
-    - name: Install SSH Key
-      uses: shimataro/ssh-key-action@v2
-      with:
-        key: ${{ secrets.DEPLOY_KEY }} 
-        known_host: 'deploy'
