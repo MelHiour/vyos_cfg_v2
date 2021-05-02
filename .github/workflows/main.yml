@@ -47,5 +47,5 @@ jobs:
         username: ${{ secrets.USERNAME }}
         port: ${{ secrets.PORT }}
         password: ${{ secrets.PASSWORD }}
-        source: "requirements.txt"
-        target: "test"
+        source: "."
+        target: "vyos_cfg_v2"
