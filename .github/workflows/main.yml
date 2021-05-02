@@ -49,14 +49,11 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         source: "."
         target: "vyos_cfg_v2"
-    - name: pip update
-      uses: fifsky/ssh-action@master
+    - name: ls -a via ssh
+      uses: garygrossgarten/github-action-ssh@release
       with:
-        command: |
-          cd vyos_cfg_v2
-          ls -a
-          pip3 install -r requirements.txt 
+        command: ls -a
         host: ${{ secrets.HOST }}
-        user: ${{ secrets.USERNAME }}
-        pass: ${{ secrets.PASSWORD }}
+        username: ${{ secrets.USERNAME }}
         port: ${{ secrets.PORT }}
+        password: ${{ secrets.PASSWORD }}
