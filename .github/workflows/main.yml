@@ -49,3 +49,12 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         source: "."
         target: "vyos_cfg_v2"
+    - name: PIP Update
+      uses: nerd4ever/ssh-action@master
+      with:
+        command: |
+          cd /vyos_cfg_v2
+          pip3 install -r requirements.txt 
+        host: ${{ secrets.HOST }}
+        user: ${{ secrets.USERNAME }}
+        pass: ${{ secrets.PASSWORD }}
