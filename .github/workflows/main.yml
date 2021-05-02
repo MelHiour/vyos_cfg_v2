@@ -33,3 +33,14 @@ jobs:
     - name: Test with pytest
       run: |
         pytest --doctest-modules --junitxml=test-report/test-results-${{ matrix.python-version }}.xml
+
+  deploy:
+
+    runs-on: ubuntu-latest
+  
+    steps:
+    - name: Install SSH Key
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.DEPLOY_KEY }} 
+        known_hosts: 'placeholder'
