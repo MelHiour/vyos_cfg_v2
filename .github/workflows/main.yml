@@ -35,7 +35,7 @@ jobs:
         pytest --doctest-modules --junitxml=test-report/test-results-${{ matrix.python-version }}.xml
 
   deploy:
-
+    needs: build
     runs-on: ubuntu-latest
   
     steps:
