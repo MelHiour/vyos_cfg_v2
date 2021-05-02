@@ -13,7 +13,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest]
         python-version: [3.5, 3.6, 3.7, 3.8]
 
     steps:
@@ -34,27 +34,27 @@ jobs:
       run: |
         pytest --doctest-modules --junitxml=test-report/test-results-${{ matrix.python-version }}.xml
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-  
-    steps:
-    - uses: actions/checkout@master
-    - name: SCP
-      uses: appleboy/scp-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        port: ${{ secrets.PORT }}
-        password: ${{ secrets.PASSWORD }}
-        source: "."
-        target: "vyos_cfg_v2"
-        
-    - name: pip update
-      uses: garygrossgarten/github-action-ssh@release
-      with:
-        command: pip3 install -r vyos_cfg_v2/requirements.txt 
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        port: ${{ secrets.PORT }}
-        password: ${{ secrets.PASSWORD }}
+#  deploy-prod:
+#    needs: build
+#    runs-on: ubuntu-latest
+#  
+#    steps:
+#    - uses: actions/checkout@master
+#    - name: SCP
+#      uses: appleboy/scp-action@master
+#      with:
+#        host: ${{ secrets.HOST }}
+#        username: ${{ secrets.USERNAME }}
+#        port: ${{ secrets.PORT }}
+#        password: ${{ secrets.PASSWORD }}
+#        source: "."
+#        target: "vyos_cfg_v2"
+#        
+#    - name: pip update
+#      uses: garygrossgarten/github-action-ssh@release
+#      with:
+#        command: pip3 install -r vyos_cfg_v2/requirements.txt 
+#        host: ${{ secrets.HOST }}
+#        username: ${{ secrets.USERNAME }}
+#        port: ${{ secrets.PORT }}
+#        password: ${{ secrets.PASSWORD }}
