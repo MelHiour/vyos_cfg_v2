@@ -34,6 +34,31 @@ jobs:
       run: |
         pytest --doctest-modules --junitxml=test-report/test-results-${{ matrix.python-version }}.xml
 
+  deploy-to-gamma:
+    needs: build
+    runs-on: ubuntu-latest
+  
+    steps:
+    - uses: actions/checkout@master
+    - name: SCP
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.TEST_HOST }}
+        username: ${{ secrets.USERNAME }}
+        port: ${{ secrets.TEST_PORT }}
+        password: ${{ secrets.PASSWORD }}
+        source: "."
+        target: "vyos_cfg_v2"
+        
+    - name: pip update
+      uses: garygrossgarten/github-action-ssh@release
+      with:
+        command: pip3 install -r vyos_cfg_v2/requirements.txt 
+        host: ${{ secrets.TEST_HOST }}
+        username: ${{ secrets.USERNAME }}
+        port: ${{ secrets.TEST_PORT }}
+        password: ${{ secrets.PASSWORD }}
+
 #  deploy-to-prod:
 #    needs: build
 #    runs-on: ubuntu-latest
