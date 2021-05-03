@@ -70,27 +70,27 @@ jobs:
         port: ${{ secrets.TEST_PORT }}
         password: ${{ secrets.PASSWORD }}
         
-#  deploy-to-prod:
-#    needs: deploy-to-gamma
-#    runs-on: ubuntu-latest
-#  
-#    steps:
-#    - uses: actions/checkout@master
-#    - name: SCP
-#      uses: appleboy/scp-action@master
-#      with:
-#        host: ${{ secrets.PROD_HOST }}
-#        username: ${{ secrets.USERNAME }}
-#        port: ${{ secrets.PROD_PORT }}
-#        password: ${{ secrets.PASSWORD }}
-#        source: "."
-#        target: "vyos_cfg_v2"
-#        
-#    - name: pip update
-#      uses: garygrossgarten/github-action-ssh@release
-#      with:
-#        command: pip3 install -r vyos_cfg_v2/requirements.txt 
-#        host: ${{ secrets.PROD_HOST }}
-#        username: ${{ secrets.USERNAME }}
-#        port: ${{ secrets.PROD_PORT }}
-#        password: ${{ secrets.PASSWORD }}
+  deploy-to-prod:
+    needs: deploy-to-gamma
+    runs-on: ubuntu-latest
+  
+    steps:
+    - uses: actions/checkout@master
+    - name: SCP
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.PROD_HOST }}
+        username: ${{ secrets.USERNAME }}
+        port: ${{ secrets.PROD_PORT }}
+        password: ${{ secrets.PASSWORD }}
+        source: "."
+        target: "vyos_cfg_v2"
+        
+    - name: pip update
+      uses: garygrossgarten/github-action-ssh@release
+      with:
+        command: pip3 install -r vyos_cfg_v2/requirements.txt 
+        host: ${{ secrets.PROD_HOST }}
+        username: ${{ secrets.USERNAME }}
+        port: ${{ secrets.PROD_PORT }}
+        password: ${{ secrets.PASSWORD }}
