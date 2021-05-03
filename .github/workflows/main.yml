@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-and-test:
 
     runs-on: ${{ matrix.os }}
     strategy:
@@ -34,7 +34,7 @@ jobs:
       run: |
         pytest --doctest-modules --junitxml=test-report/test-results-${{ matrix.python-version }}.xml
 
-#  deploy-prod:
+#  deploy-to-prod:
 #    needs: build
 #    runs-on: ubuntu-latest
 #  
@@ -43,9 +43,9 @@ jobs:
 #    - name: SCP
 #      uses: appleboy/scp-action@master
 #      with:
-#        host: ${{ secrets.HOST }}
+#        host: ${{ secrets.PROD_HOST }}
 #        username: ${{ secrets.USERNAME }}
-#        port: ${{ secrets.PORT }}
+#        port: ${{ secrets.PROD_PORT }}
 #        password: ${{ secrets.PASSWORD }}
 #        source: "."
 #        target: "vyos_cfg_v2"
@@ -54,7 +54,7 @@ jobs:
 #      uses: garygrossgarten/github-action-ssh@release
 #      with:
 #        command: pip3 install -r vyos_cfg_v2/requirements.txt 
-#        host: ${{ secrets.HOST }}
+#        host: ${{ secrets.PROD_HOST }}
 #        username: ${{ secrets.USERNAME }}
-#        port: ${{ secrets.PORT }}
+#        port: ${{ secrets.PROD_PORT }}
 #        password: ${{ secrets.PASSWORD }}
