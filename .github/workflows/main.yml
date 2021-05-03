@@ -62,7 +62,9 @@ jobs:
     - name: Is vyos_cfg_v2 runnable
       uses: garygrossgarten/github-action-ssh@release
       with:
-        command: python3 vyos_cfg.py -i inventory.yaml -d deployment.yaml --brave --no-save
+        command: |
+           cd vyos_cfg_v2
+           python3 vyos_cfg_v2.py -i inventory.yaml -d deployment.yaml --brave --skip-save
         host: ${{ secrets.TEST_HOST }}
         username: ${{ secrets.USERNAME }}
         port: ${{ secrets.TEST_PORT }}
