@@ -35,6 +35,7 @@ jobs:
         pytest --doctest-modules --junitxml=test-report/test-results-${{ matrix.python-version }}.xml
 
   deploy-to-gamma:
+    if: ${{ false }}  # disable
     needs: build-and-test
     runs-on: ubuntu-latest
   
@@ -71,6 +72,7 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         
   deploy-to-prod:
+    if: ${{ false }}  # disable
     needs: deploy-to-gamma
     runs-on: ubuntu-latest
   
